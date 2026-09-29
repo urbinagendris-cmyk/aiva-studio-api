@@ -1,6 +1,6 @@
-package com.cesde.aivastudio.model.entity;
+package com.aivastudio.model.entity;
 
-import com.cesde.aivastudio.model.base.BaseEntity;
+import com.aivastudio.model.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,7 +24,7 @@ public class Proyecto extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id", nullable = false)
-    private Usuario usuario;
+    private com.aivastudio.model.entity.Usuario usuario;
 
     @ManyToMany
     @JoinTable(
