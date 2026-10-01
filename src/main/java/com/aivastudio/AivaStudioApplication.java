@@ -1,4 +1,4 @@
-package com.cesde.aivastudio;
+package com.aivastudio;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

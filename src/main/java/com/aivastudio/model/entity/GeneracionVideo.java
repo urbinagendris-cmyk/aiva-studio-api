@@ -1,6 +1,6 @@
-package com.cesde.aivastudio.model.entity;
+package com.aivastudio.model.entity;
 
-import com.cesde.aivastudio.model.base.BaseEntity;
+import com.aivastudio.model.base.BaseEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

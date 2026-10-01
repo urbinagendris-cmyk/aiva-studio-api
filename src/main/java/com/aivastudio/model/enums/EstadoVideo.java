@@ -1,4 +1,4 @@
-package com.cesde.aivastudio.model.enums;
+package com.aivastudio.model.enums;
 
 public enum EstadoVideo {
 
