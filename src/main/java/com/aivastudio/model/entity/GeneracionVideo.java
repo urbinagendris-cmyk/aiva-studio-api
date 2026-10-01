@@ -1,8 +1,6 @@
 package com.aivastudio.model.entity;
 
 import com.aivastudio.model.base.BaseEntity;
-import com.aivastudio.model.entity.prompt;
-import com.aivastudio.model.entity.Video;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
