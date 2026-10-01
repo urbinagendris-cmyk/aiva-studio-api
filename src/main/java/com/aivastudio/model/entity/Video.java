@@ -1,8 +1,8 @@
-package com.cesde.aivastudio.model.entity;
+package com.aivastudio.model.entity;
 
-import com.cesde.aivastudio.model.base.BaseEntity;
-import com.cesde.aivastudio.model.embeddable.ConfiguracionVideo;
-import com.cesde.aivastudio.model.enums.EstadoVideo;
+import com.aivastudio.model.base.BaseEntity;
+import com.aivastudio.model.embeddable.ConfiguracionVideo;
+import com.aivastudio.model.enums.EstadoVideo;
 import jakarta.persistence.*;
 import lombok.*;
 
