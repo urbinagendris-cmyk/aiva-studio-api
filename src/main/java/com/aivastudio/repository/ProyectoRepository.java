@@ -1,9 +1,8 @@
 package com.aivastudio.repository;
 
-import com.aivastudio.model.Proyecto;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
-@Repository
+import com.aivastudio.model.entity.Proyecto;
+
 public interface ProyectoRepository extends JpaRepository<Proyecto, Long> {
 }
