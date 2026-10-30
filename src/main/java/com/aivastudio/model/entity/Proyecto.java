@@ -9,11 +9,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "proyectos")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+
 public class Proyecto extends BaseEntity {
 
     @Column(nullable = false, length = 150)
