@@ -1,37 +1,60 @@
 package com.aivastudio.model.entity;
 
+import java.time.LocalDateTime;
+
 import com.aivastudio.model.base.BaseEntity;
-import com.aivastudio.model.embeddable.ConfiguracionVideo;
 import com.aivastudio.model.enums.EstadoVideo;
-import jakarta.persistence.*;
-import lombok.*;
+import com.aivastudio.model.embeddable.ConfiguracionVideo;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "videos")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class Video extends BaseEntity {
 
-    @Column(nullable = false, length = 200)
-    private String titulo;
+   private String title;
+   private String description;
+   private double duracionMinutos;
 
-    @Column(length = 500)
-    private String url;
+   public Video() {
+   }
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 20)
-    private EstadoVideo estado;
+   public Video(Long id, String title, String description, double duracionMinutos) {
+       super(id);
+       this.title = title;
+       this.description = description;
+       this.duracionMinutos = duracionMinutos;
+   }
 
-    @Embedded
-    private ConfiguracionVideo configuracion;
+   public String getTitle() {
+       return title;
+   }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "proyecto_id", nullable = false)
-    private Proyecto proyecto;
+    public void setTitle(String title) {
+         this.title = title;
+    }
 
-    @OneToOne(mappedBy = "video")
-    private GeneracionVideo generacionVideo;
+    public String getDescription() {
+         return description;
+    }
+
+    public void setDescription(String description) {
+         this.description = description;
+    }
+
+    public double getDuracionMinutos() {
+         return duracionMinutos;
+    }
+
+    public void setDuracionMinutos(double duracionMinutos) {
+         this.duracionMinutos = duracionMinutos;
+    }
 }
