@@ -5,48 +5,38 @@ import java.util.List;
 
 import com.aivastudio.model.base.BaseEntity;
 
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "usuarios")
+@AttributeOverride(name = "id", column = @Column(name = "id_usuario"))
 public class Usuario extends BaseEntity {
 
+    @Column(nullable = false, length = 100)
     private String nombre;
+
+    @Column(nullable = false, unique = true, length = 150)
     private String email;
-    private String password;
 
-    public Usuario() {
-    }
+    @Column(nullable = false)
+    private Boolean activo = true;
 
-    public Usuario(Long id, String nombre, String email, String password) {
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Proyecto> proyectos = new ArrayList<>();
+
+    public Usuario() {}
+
+    public Usuario(Long id, String nombre, String email, Boolean activo) {
         super(id);
         this.nombre = nombre;
         this.email = email;
-        this.password = password;
+        this.activo = (activo != null) ? activo : Boolean.TRUE;
     }
 
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    // + getters y setters (en setActivo puedes aplicar el mismo "si es null, true")
 }

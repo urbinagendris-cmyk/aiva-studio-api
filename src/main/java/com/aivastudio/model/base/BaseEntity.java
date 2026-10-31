@@ -22,41 +22,16 @@ public abstract class BaseEntity {
     private Long id;
 
     @CreatedDate
-    @Column(name = "fecha_creacion", nullable = false, updatable = false)
+    @Column(name = "fecha_creacion", updatable = false)
     private LocalDateTime fechaCreacion;
 
     @LastModifiedDate
     @Column(name = "fecha_actualizacion")
     private LocalDateTime fechaActualizacion;
 
-    public BaseEntity() {
-    }
+    public BaseEntity() {}
 
-    public BaseEntity(Long id) {
-        this.id = id;
-    }
+    public BaseEntity(Long id) { this.id = id; }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public LocalDateTime getFechaCreacion() {
-        return fechaCreacion;
-    }
-
-    public void setFechaCreacion(LocalDateTime fechaCreacion) {
-        this.fechaCreacion = fechaCreacion;
-    }
-
-    public LocalDateTime getFechaActualizacion() {
-        return fechaActualizacion;
-    }
-
-    public void setFechaActualizacion(LocalDateTime fechaActualizacion) {
-        this.fechaActualizacion = fechaActualizacion;
-    }
+    // + getters y setters de los 3 campos (generalos con el IDE)
 }

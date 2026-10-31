@@ -1,40 +1,40 @@
 package com.aivastudio.model.entity;
 
-import com.aivastudio.model.base.BaseEntity;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-
 @Entity
 @Table(name = "proyectos")
-
+@AttributeOverride(name = "id", column = @Column(name = "id_proyecto"))
 public class Proyecto extends BaseEntity {
 
-   private String nombre;
-   private String descripcion;
+    @Column(nullable = false, length = 150)
+    private String titulo;
 
-    public Proyecto() {
-    }
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String prompt;
 
-    public Proyecto(Long id, String nombre, String descripcion) {
+    @Column(nullable = false, length = 60)
+    private String categoria;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private EstadoProyecto estado = EstadoProyecto.BORRADOR;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "id_usuario", nullable = false)
+    private Usuario usuario;
+
+    @OneToMany(mappedBy = "proyecto", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Video> videos = new ArrayList<>();
+
+    public Proyecto() {}
+
+    public Proyecto(Long id, String titulo, String prompt, String categoria,
+                    EstadoProyecto estado, Usuario usuario) {
         super(id);
-        this.nombre = nombre;
-        this.descripcion = descripcion;
+        this.titulo = titulo;
+        this.prompt = prompt;
+        this.categoria = categoria;
+        this.estado = (estado != null) ? estado : EstadoProyecto.BORRADOR;
+        this.usuario = usuario;
     }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
+    // + getters y setters
 }

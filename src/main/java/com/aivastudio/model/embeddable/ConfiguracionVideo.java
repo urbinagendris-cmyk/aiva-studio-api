@@ -1,52 +1,37 @@
 package com.aivastudio.model.embeddable;
 
+import com.aivastudio.model.enums.FormatoPantalla;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 
 @Embeddable
 public class ConfiguracionVideo {
 
-    @Column(nullable = false, length = 20)
+    @Column(name = "estilo_visual", nullable = false, length = 50)
+    private String estiloVisual;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "formato_pantalla", nullable = false, length = 30)
+    private FormatoPantalla formatoPantalla;
+
+    @Column(name = "resolucion", nullable = false, length = 20)
     private String resolucion;
 
-    @Column(nullable = false, length = 20)
-    private String formato;
+    @Column(name = "duracion_segundos", nullable = false)
+    private Integer duracionSegundos;
 
-    @Column(nullable = false)
-    private Integer duracion;
+    public ConfiguracionVideo() {}
 
-    public ConfiguracionVideo() {
-    }
-
-    public ConfiguracionVideo(String resolucion, String formato, Integer duracion) {
+    public ConfiguracionVideo(String estiloVisual, FormatoPantalla formatoPantalla,
+                              String resolucion, Integer duracionSegundos) {
+        this.estiloVisual = estiloVisual;
+        this.formatoPantalla = formatoPantalla;
         this.resolucion = resolucion;
-        this.formato = formato;
-        this.duracion = duracion;
+        this.duracionSegundos = duracionSegundos;
     }
 
-    public String getResolucion() {
-        return resolucion;
-    }
-
-    public void setResolucion(String resolucion) {
-        this.resolucion = resolucion;
-    }
-
-    public String getFormato() {
-        return formato;
-    }
-
-    public void setFormato(String formato) {
-        this.formato = formato;
-    }
-
-    public Integer getDuracion() {
-        return duracion;
-    }
-
-    public void setDuracion(Integer duracion) {
-        this.duracion = duracion;
-    }
-
+    // + getters y setters
 }
