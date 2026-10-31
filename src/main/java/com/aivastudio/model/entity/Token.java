@@ -14,7 +14,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "aiva_api_tokens")
-public class ApiToken {
+public class Token {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,10 +30,10 @@ public class ApiToken {
     @Column(nullable = false)
     private LocalDateTime expiresAt;
 
-    protected ApiToken() {
+    protected Token() {
     }
 
-    public ApiToken(String tokenHash, User user, LocalDateTime expiresAt) {
+    public Token(String tokenHash, User user, LocalDateTime expiresAt) {
         this.tokenHash = tokenHash;
         this.user = user;
         this.expiresAt = expiresAt;

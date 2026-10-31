@@ -13,7 +13,7 @@ import com.aivastudio.model.dto.ProjectResponse;
 import com.aivastudio.model.entity.CreditMovement;
 import com.aivastudio.model.entity.Project;
 import com.aivastudio.model.entity.User;
-import com.aivastudio.repository.CreditMovementRepository;
+import com.aivastudio.repository.CreditRepository;
 import com.aivastudio.repository.ProjectRepository;
 import com.aivastudio.repository.UserRepository;
 
@@ -28,14 +28,14 @@ public class ProjectService {
 
     private final ProjectRepository projectRepository;
     private final UserRepository userRepository;
-    private final CreditMovementRepository creditMovementRepository;
+    private final CreditRepository creditMovementRepository;
     private final CurrentUserService currentUserService;
     private final AiModelService aiModelService;
 
     public ProjectService(
             ProjectRepository projectRepository,
             UserRepository userRepository,
-            CreditMovementRepository creditMovementRepository,
+            CreditRepository creditMovementRepository,
             CurrentUserService currentUserService,
             AiModelService aiModelService) {
         this.projectRepository = projectRepository;
