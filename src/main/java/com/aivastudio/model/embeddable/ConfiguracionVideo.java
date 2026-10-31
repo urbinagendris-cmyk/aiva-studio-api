@@ -1,30 +1,37 @@
 package com.aivastudio.model.embeddable;
 
+import com.aivastudio.model.enums.FormatoPantalla;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 
 @Embeddable
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class ConfiguracionVideo {
 
-    @Column(nullable = false, length = 20)
+    @Column(name = "estilo_visual", nullable = false, length = 50)
+    private String estiloVisual;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "formato_pantalla", nullable = false, length = 30)
+    private FormatoPantalla formatoPantalla;
+
+    @Column(name = "resolucion", nullable = false, length = 20)
     private String resolucion;
 
-    @Column(nullable = false, length = 20)
-    private String formato;
+    @Column(name = "duracion_segundos", nullable = false)
+    private Integer duracionSegundos;
 
-    @Column(nullable = false)
-    private Integer duracion;
+    public ConfiguracionVideo() {}
 
-    @Column(nullable = false, length = 20)
-    private String relacionAspecto;
+    public ConfiguracionVideo(String estiloVisual, FormatoPantalla formatoPantalla,
+                              String resolucion, Integer duracionSegundos) {
+        this.estiloVisual = estiloVisual;
+        this.formatoPantalla = formatoPantalla;
+        this.resolucion = resolucion;
+        this.duracionSegundos = duracionSegundos;
+    }
+
+    // + getters y setters
 }

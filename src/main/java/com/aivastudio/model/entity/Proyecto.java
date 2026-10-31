@@ -1,41 +1,40 @@
 package com.aivastudio.model.entity;
 
-import com.aivastudio.model.base.BaseEntity;
-import jakarta.persistence.*;
-import lombok.*;
-
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
 @Table(name = "proyectos")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@AttributeOverride(name = "id", column = @Column(name = "id_proyecto"))
 public class Proyecto extends BaseEntity {
 
     @Column(nullable = false, length = 150)
-    private String nombre;
+    private String titulo;
 
-    @Column(length = 500)
-    private String descripcion;
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String prompt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "usuario_id", nullable = false)
-    private com.aivastudio.model.entity.Usuario usuario;
+    @Column(nullable = false, length = 60)
+    private String categoria;
 
-    @ManyToMany
-    @JoinTable(
-        name = "proyecto_prompt",
-        joinColumns = @JoinColumn(name = "proyecto_id"),
-        inverseJoinColumns = @JoinColumn(name = "prompt_id")
-    )
-    @Builder.Default
-    private List<Prompt> prompts = new ArrayList<>();
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private EstadoProyecto estado = EstadoProyecto.BORRADOR;
 
-    @OneToMany(mappedBy = "proyecto")
-    @Builder.Default
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "id_usuario", nullable = false)
+    private Usuario usuario;
+
+    @OneToMany(mappedBy = "proyecto", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Video> videos = new ArrayList<>();
+
+    public Proyecto() {}
+
+    public Proyecto(Long id, String titulo, String prompt, String categoria,
+                    EstadoProyecto estado, Usuario usuario) {
+        super(id);
+        this.titulo = titulo;
+        this.prompt = prompt;
+        this.categoria = categoria;
+        this.estado = (estado != null) ? estado : EstadoProyecto.BORRADOR;
+        this.usuario = usuario;
+    }
+    // + getters y setters
 }
