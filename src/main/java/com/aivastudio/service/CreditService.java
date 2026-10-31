@@ -13,7 +13,7 @@ import com.aivastudio.model.dto.RechargeResponse;
 import com.aivastudio.model.dto.UserResponse;
 import com.aivastudio.model.entity.CreditMovement;
 import com.aivastudio.model.entity.User;
-import com.aivastudio.repository.CreditMovementRepository;
+import com.aivastudio.repository.CreditRepository;
 import com.aivastudio.repository.UserRepository;
 
 @Service
@@ -25,12 +25,12 @@ public class CreditService {
 
     private final CurrentUserService currentUserService;
     private final UserRepository userRepository;
-    private final CreditMovementRepository creditMovementRepository;
+    private final CreditRepository creditMovementRepository;
 
     public CreditService(
             CurrentUserService currentUserService,
             UserRepository userRepository,
-            CreditMovementRepository creditMovementRepository) {
+            CreditRepository creditMovementRepository) {
         this.currentUserService = currentUserService;
         this.userRepository = userRepository;
         this.creditMovementRepository = creditMovementRepository;

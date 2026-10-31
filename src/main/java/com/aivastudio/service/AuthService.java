@@ -15,7 +15,7 @@ import com.aivastudio.model.dto.RegistrationRequest;
 import com.aivastudio.model.dto.UserResponse;
 import com.aivastudio.model.entity.CreditMovement;
 import com.aivastudio.model.entity.User;
-import com.aivastudio.repository.CreditMovementRepository;
+import com.aivastudio.repository.CreditRepository;
 import com.aivastudio.repository.UserRepository;
 
 @Service
@@ -25,13 +25,13 @@ public class AuthService {
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$");
 
     private final UserRepository userRepository;
-    private final CreditMovementRepository creditMovementRepository;
+    private final CreditRepository creditMovementRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenService tokenService;
 
     public AuthService(
             UserRepository userRepository,
-            CreditMovementRepository creditMovementRepository,
+            CreditRepository creditMovementRepository,
             PasswordEncoder passwordEncoder,
             TokenService tokenService) {
         this.userRepository = userRepository;
