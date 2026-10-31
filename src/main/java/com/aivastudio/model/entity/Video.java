@@ -7,7 +7,7 @@ public class Video extends BaseEntity {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_proyecto", nullable = false)
-    private Proyecto proyecto;
+    private Proyect proyecto;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_modelo", nullable = false)
@@ -39,7 +39,7 @@ public class Video extends BaseEntity {
 
     public Video() {}
 
-    public Video(Long id, Proyecto proyecto, ModeloIa modelo, ConfiguracionVideo configuracion,
+    public Video(Long id, Proyect proyecto, ModeloIa modelo, ConfiguracionVideo configuracion,
                  BigDecimal costoTotalCreditos, BigDecimal pesoArchivoMb,
                  String urlPreview, String urlVideoFinal, LocalDateTime fechaGeneracion) {
         super(id);
