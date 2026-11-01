@@ -11,9 +11,9 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.aivastudio.model.entity.ApiToken;
+import com.aivastudio.model.entity.Token;
 import com.aivastudio.model.entity.User;
-import com.aivastudio.repository.ApiTokenRepository;
+import com.aivastudio.repository.TokenRepository;
 
 @Service
 public class TokenService {
@@ -21,9 +21,9 @@ public class TokenService {
     private static final SecureRandom RANDOM = new SecureRandom();
     private static final int TOKEN_BYTES = 32;
 
-    private final ApiTokenRepository apiTokenRepository;
+    private final TokenRepository apiTokenRepository;
 
-    public TokenService(ApiTokenRepository apiTokenRepository) {
+    public TokenService(TokenRepository apiTokenRepository) {
         this.apiTokenRepository = apiTokenRepository;
     }
 
@@ -32,7 +32,7 @@ public class TokenService {
         byte[] tokenBytes = new byte[TOKEN_BYTES];
         RANDOM.nextBytes(tokenBytes);
         String token = Base64.getUrlEncoder().withoutPadding().encodeToString(tokenBytes);
-        apiTokenRepository.save(new ApiToken(
+        apiTokenRepository.save(new Token(
                 hash(token),
                 user,
                 LocalDateTime.now(ZoneOffset.UTC).plusHours(12)));
@@ -43,7 +43,7 @@ public class TokenService {
     public Optional<User> authenticate(String token) {
         return apiTokenRepository
                 .findByTokenHashAndExpiresAtAfter(hash(token), LocalDateTime.now(ZoneOffset.UTC))
-                .map(ApiToken::getUser);
+                .map(Token::getUser);
     }
 
     @Transactional

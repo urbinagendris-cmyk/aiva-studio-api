@@ -1,5 +1,6 @@
 package com.aivastudio.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +26,7 @@ public class AuthController {
     }
 
     @PostMapping("/registro")
-    public ResponseEntity<AuthResponse> register(@RequestBody RegistrationRequest request) {
+    public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegistrationRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(authService.register(request));
     }
 

@@ -2,6 +2,7 @@ package com.aivastudio.controller;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +27,7 @@ public class AivaProjectController {
     }
 
     @PostMapping("/crear")
-    public ResponseEntity<ProjectResponse> create(@RequestBody ProjectRequest request) {
+    public ResponseEntity<ProjectResponse> create(@Valid @RequestBody ProjectRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(projectService.create(request));
     }
 

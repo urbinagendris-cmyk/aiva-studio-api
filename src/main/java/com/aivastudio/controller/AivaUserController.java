@@ -2,6 +2,7 @@ package com.aivastudio.controller;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,7 +39,7 @@ public class AivaUserController {
     }
 
     @PostMapping("/recargar")
-    public ResponseEntity<RechargeResponse> recharge(@RequestBody RechargeRequest request) {
+    public ResponseEntity<RechargeResponse> recharge(@Valid @RequestBody RechargeRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(creditService.recharge(request));
     }
 }

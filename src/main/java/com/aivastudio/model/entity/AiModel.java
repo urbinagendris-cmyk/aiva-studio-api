@@ -1,7 +1,6 @@
 package com.aivastudio.model.entity;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.aivastudio.model.base.BaseEntity;
@@ -16,7 +15,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "modelos_ia")
 @AttributeOverride(name = "id", column = @Column(name = "id_modelo"))
-public class ModeloIa extends BaseEntity {
+public class AiModel extends BaseEntity {
 
     @Column(nullable = false, length = 100)
     private String nombre;
@@ -33,10 +32,11 @@ public class ModeloIa extends BaseEntity {
     @Column(nullable = false)
     private Boolean activo = true;
 
-    public ModeloIa() {}
+    public AiModel() {
+    }
 
-    public ModeloIa(Long id, String nombre, String proveedor, String version,
-                    BigDecimal costoPorSegundo, Boolean activo) {
+    public AiModel(Long id, String nombre, String proveedor, String version,
+            BigDecimal costoPorSegundo, Boolean activo) {
         super(id);
         this.nombre = nombre;
         this.proveedor = proveedor;
@@ -45,4 +45,44 @@ public class ModeloIa extends BaseEntity {
         this.activo = (activo != null) ? activo : Boolean.TRUE;
     }
     // + getters y setters
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getProveedor() {
+        return proveedor;
+    }
+
+    public void setProveedor(String proveedor) {
+        this.proveedor = proveedor;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public BigDecimal getCostoPorSegundo() {
+        return costoPorSegundo;
+    }
+
+    public void setCostoPorSegundo(BigDecimal costoPorSegundo) {
+        this.costoPorSegundo = costoPorSegundo;
+    }
+
+    public Boolean getActivo() {
+        return activo;
+    }
+
+    public void setActivo(Boolean activo) {
+        this.activo = activo;
+    }
 }

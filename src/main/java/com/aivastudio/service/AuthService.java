@@ -15,34 +15,34 @@ import com.aivastudio.model.dto.RegistrationRequest;
 import com.aivastudio.model.dto.UserResponse;
 import com.aivastudio.model.entity.CreditMovement;
 import com.aivastudio.model.entity.User;
-import com.aivastudio.repository.CreditMovementRepository;
+import com.aivastudio.repository.CreditRepository;
 import com.aivastudio.repository.UserRepository;
 
+@Service
 public class AuthService {
     
     private static final long INITIAL_CREDITS = 100;
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$");
     
     private final UserRepository userRepository;
-    private final CreditMovementRepository creditMovementRepository;
+    private final CreditRepository creditMovementRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenService tokenService;
     
     public AuthService(
-        UserRepository userRepository,
-        CreditMovementRepository creditMovementRepository,
-        PasswordEncoder passwordEncoder,
-        TokenService tokenService) {
-            this.userRepository = userRepository;
-            this.creditMovementRepository = creditMovementRepository;
-            this.passwordEncoder = passwordEncoder;
-            this.tokenService = tokenService;
-        }
-        
-        @Transactional
-        public AuthResponse register(RegistrationRequest request) {
-            String name = request.nombre() == null ? "" : request.nombre().trim();
-            @Service
+            UserRepository userRepository,
+            CreditRepository creditMovementRepository,
+            PasswordEncoder passwordEncoder,
+            TokenService tokenService) {
+        this.userRepository = userRepository;
+        this.creditMovementRepository = creditMovementRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.tokenService = tokenService;
+    }
+
+    @Transactional
+    public AuthResponse register(RegistrationRequest request) {
+        String name = request.nombre() == null ? "" : request.nombre().trim();
         String email = normalizeEmail(request.email());
         String password = request.password();
 

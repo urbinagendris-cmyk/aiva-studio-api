@@ -4,9 +4,11 @@ import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -37,6 +39,16 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<Object> manejarSolicitudInvalida(HttpMessageNotReadableException ex) {
         return construirRespuesta(HttpStatus.BAD_REQUEST, "El cuerpo de la solicitud no es válido");
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Object> manejarValidacion(MethodArgumentNotValidException ex) {
+        String mensaje = ex.getBindingResult().getAllErrors().stream()
+                .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                .filter(value -> value != null && !value.isBlank())
+                .findFirst()
+                .orElse("La solicitud contiene datos inválidos");
+        return construirRespuesta(HttpStatus.BAD_REQUEST, mensaje);
     }
 
     private ResponseEntity<Object> construirRespuesta(HttpStatus status, String mensaje) {

@@ -1,4 +1,12 @@
 package com.aivastudio.model.dto;
 
-public record RechargeRequest(Long usuarioId, Long cantidad) {
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+
+public record RechargeRequest(
+        @NotNull(message = "No puedes operar sobre otra cuenta")
+        Long usuarioId,
+        @NotNull(message = "La recarga mínima es de 50 créditos")
+        @Min(value = 50, message = "La recarga mínima es de 50 créditos")
+        Long cantidad) {
 }

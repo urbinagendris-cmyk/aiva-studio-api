@@ -45,6 +45,7 @@ public class CreditMovement {
     }
 
     @PrePersist
+    @SuppressWarnings("unused") // Invoked by JPA before persistence.
     void setCreatedAt() {
         if (createdAt == null) {
             createdAt = LocalDateTime.now(ZoneOffset.UTC);
@@ -53,6 +54,10 @@ public class CreditMovement {
 
     public Long getId() {
         return id;
+    }
+
+    public User getUser() {
+        return user;
     }
 
     public long getAmount() {
