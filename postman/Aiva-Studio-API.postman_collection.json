@@ -1,0 +1,562 @@
+{
+  "info": {
+    "_postman_id": "fba5b54e-67ab-4726-9aa9-f1fdb1e77c4a",
+    "name": "AIVA Studio API",
+    "description": "Pruebas de integración para Spring Boot. La ejecución crea un usuario y datos de prueba permanentes en la base configurada; use una base de pruebas cuando sea posible.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Rechazar registro inválido",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombre\": \"\",\n  \"email\": \"correo-invalido\",\n  \"password\": \"123456\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/registro",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "auth",
+            "registro"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('El registro inválido devuelve 400', function () {",
+              "  pm.response.to.have.status(400);",
+              "  pm.expect(pm.response.json().message).to.be.a('string');",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Registrar usuario Postman",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const runId = `${Date.now()}-${Math.floor(Math.random() * 1000000)}`;",
+              "pm.collectionVariables.set('testEmail', `postman.${runId}@example.test`);",
+              "pm.collectionVariables.set('testPassword', `Aiva-${runId}-Test`);",
+              "pm.collectionVariables.set('projectName', `Prueba Postman ${runId}`);"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('El registro crea una cuenta con 100 créditos iniciales', function () {",
+              "  pm.response.to.have.status(201);",
+              "  const data = pm.response.json();",
+              "  pm.expect(data.token).to.be.a('string').and.not.empty;",
+              "  pm.expect(data.usuario.creditosDisponibles).to.eql(100);",
+              "  pm.collectionVariables.set('token', data.token);",
+              "  pm.collectionVariables.set('userId', data.usuario.id);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombre\": \"Usuario de prueba Postman\",\n  \"email\": \"{{testEmail}}\",\n  \"password\": \"{{testPassword}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/registro",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "auth",
+            "registro"
+          ]
+        }
+      }
+    },
+    {
+      "name": "3. Iniciar sesión",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Login devuelve un token válido y el usuario registrado', function () {",
+              "  pm.response.to.have.status(200);",
+              "  const data = pm.response.json();",
+              "  pm.expect(data.token).to.be.a('string').and.not.empty;",
+              "  pm.expect(String(data.usuario.id)).to.eql(String(pm.collectionVariables.get('userId')));",
+              "  pm.collectionVariables.set('token', data.token);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"{{testEmail}}\",\n  \"password\": \"{{testPassword}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/login",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "auth",
+            "login"
+          ]
+        }
+      }
+    },
+    {
+      "name": "4. Listar modelos",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('El catálogo contiene modelos disponibles', function () {",
+              "  pm.response.to.have.status(200);",
+              "  const models = pm.response.json();",
+              "  pm.expect(models).to.be.an('array').that.is.not.empty;",
+              "  const model = models.reduce((cheapest, candidate) => candidate.costoPorSegundo < cheapest.costoPorSegundo ? candidate : cheapest);",
+              "  pm.collectionVariables.set('modelId', model.id);",
+              "  pm.collectionVariables.set('modelName', model.nombre);",
+              "  pm.collectionVariables.set('projectCost', Number(model.costoPorSegundo) * 5);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/aiva/modelos",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "aiva",
+            "modelos"
+          ]
+        },
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "5. Consultar perfil",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('El perfil muestra la cuenta y sus créditos', function () {",
+              "  pm.response.to.have.status(200);",
+              "  const user = pm.response.json();",
+              "  pm.expect(String(user.id)).to.eql(String(pm.collectionVariables.get('userId')));",
+              "  pm.expect(user.creditosDisponibles).to.eql(100);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/aiva/usuarios/{{userId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "aiva",
+            "usuarios",
+            "{{userId}}"
+          ]
+        },
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "6. Crear proyecto",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('El proyecto se crea y el costo se calcula correctamente', function () {",
+              "  pm.response.to.have.status(201);",
+              "  const project = pm.response.json();",
+              "  pm.expect(project.nombre).to.eql(pm.collectionVariables.get('projectName'));",
+              "  pm.expect(project.costoCreditos).to.eql(Number(pm.collectionVariables.get('projectCost')));",
+              "  pm.collectionVariables.set('projectId', project.id);",
+              "  pm.collectionVariables.set('expectedCredits', project.creditosDisponibles);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"usuarioId\": {{userId}},\n  \"nombre\": \"{{projectName}}\",\n  \"prompt\": \"Prueba automatizada Postman para validar el flujo de creación de proyectos.\",\n  \"modelId\": \"{{modelId}}\",\n  \"modeloIa\": \"{{modelName}}\",\n  \"costoCreditos\": {{projectCost}},\n  \"duracionSeg\": 5,\n  \"formato\": \"16:9\",\n  \"estilo\": \"Cinematográfico\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/aiva/proyectos/crear",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "aiva",
+            "proyectos",
+            "crear"
+          ]
+        },
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "7. Listar proyectos",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('El proyecto recién creado aparece en el historial', function () {",
+              "  pm.response.to.have.status(200);",
+              "  const projects = pm.response.json();",
+              "  pm.expect(projects).to.be.an('array');",
+              "  pm.expect(projects.some(project => String(project.id) === String(pm.collectionVariables.get('projectId')))).to.eql(true);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/aiva/proyectos/usuario/{{userId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "aiva",
+            "proyectos",
+            "usuario",
+            "{{userId}}"
+          ]
+        },
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "8. Listar movimientos",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('El historial registra el crédito inicial y el proyecto', function () {",
+              "  pm.response.to.have.status(200);",
+              "  const movements = pm.response.json();",
+              "  pm.expect(movements).to.be.an('array');",
+              "  pm.expect(movements.some(item => item.amount === 100)).to.eql(true);",
+              "  pm.expect(movements.some(item => item.amount === -Number(pm.collectionVariables.get('projectCost')))).to.eql(true);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/aiva/usuarios/{{userId}}/movimientos",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "aiva",
+            "usuarios",
+            "{{userId}}",
+            "movimientos"
+          ]
+        },
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "9. Recargar créditos (prueba)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('La recarga aplica el bono del 20% desde 500 créditos', function () {",
+              "  pm.response.to.have.status(201);",
+              "  const recharge = pm.response.json();",
+              "  pm.expect(recharge.cantidad).to.eql(500);",
+              "  pm.expect(recharge.bonificacion).to.eql(100);",
+              "  pm.expect(recharge.totalRecargado).to.eql(600);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"usuarioId\": {{userId}},\n  \"cantidad\": 500\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/aiva/usuarios/recargar",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "aiva",
+            "usuarios",
+            "recargar"
+          ]
+        },
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "10. Cerrar sesión",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Logout revoca el token', function () {",
+              "  pm.response.to.have.status(204);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/logout",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "auth",
+            "logout"
+          ]
+        },
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "11. Rechazar token revocado",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('La API rechaza el token después del logout', function () {",
+              "  pm.response.to.have.status(401);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/aiva/modelos",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "aiva",
+            "modelos"
+          ]
+        },
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
